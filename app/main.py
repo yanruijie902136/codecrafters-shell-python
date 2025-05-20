@@ -16,12 +16,14 @@ def get_all_executables() -> set[str]:
 
     for d in dirs:
         try:
-            for name in os.listdir(d):
-                path = os.path.join(d, name)
-                if os.path.isfile(path) and os.access(path, os.X_OK):
-                    executables.add(name)
+            names = os.listdir(d)
         except FileNotFoundError:
             continue
+
+        for name in names:
+            path = os.path.join(d, name)
+            if os.path.isfile(path) and os.access(path, os.X_OK):
+                executables.add(name)
 
     return executables
 
