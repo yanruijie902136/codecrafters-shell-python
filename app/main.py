@@ -1,4 +1,5 @@
 import shutil
+import subprocess
 import sys
 from typing import NoReturn
 
@@ -38,7 +39,10 @@ def execute(arguments: list[str]) -> None:
         case "type":
             execute_type(arguments)
         case _:
-            sys.stderr.write(f"{command_name}: command not found\n")
+            try:
+                subprocess.run(arguments)
+            except FileNotFoundError:
+                sys.stderr.write(f"{command_name}: command not found\n")
 
 
 def main() -> None:
