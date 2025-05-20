@@ -2,6 +2,10 @@ import sys
 from typing import NoReturn
 
 
+def execute_echo(arguments: list[str]) -> None:
+    sys.stdout.write(" ".join(arguments[1:]) + "\n")
+
+
 def execute_exit(arguments: list[str]) -> NoReturn:
     sys.exit(int(arguments[1]))
 
@@ -12,6 +16,8 @@ def execute(arguments: list[str]) -> None:
 
     command_name = arguments[0]
     match command_name:
+        case "echo":
+            execute_echo(arguments)
         case "exit":
             execute_exit(arguments)
         case _:
