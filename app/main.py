@@ -1,9 +1,48 @@
 import os
+import readline
 import shlex
 import shutil
 import subprocess
 import sys
 from typing import NoReturn
+
+
+def get_all_executables() -> set[str]:
+    executables = set()
+
+    dirs = os.getenv("PATH")
+    if dirs is None:
+        return executables
+
+    for d in dirs:
+        try:
+            for name in os.listdir(d):
+                path = os.path.join(d, name)
+                if os.path.isfile(path) and os.access(path, os.X_OK):
+                    executables.add(name)
+        except FileNotFoundError:
+            continue
+
+    return executables
+
+
+BUILTINS = set(["cd", "echo", "exit", "pwd", "type"])
+
+
+class Completer:
+    def __init__(self) -> None:
+        self._candidates = BUILTINS.union(get_all_executables())
+
+    def complete(self, text: str, state: int) -> str | None:
+        if state == 0:
+            self._matches = [s for s in self._candidates if s.startswith(text)]
+
+        if state >= len(self._matches):
+            return None
+        elif len(self._matches) == 1:
+            return self._matches[0] + " "
+        else:
+            return self._matches[state]
 
 
 def execute_cd(arguments: list[str]) -> None:
@@ -64,6 +103,9 @@ def execute(arguments: list[str]) -> None:
 
 
 def main() -> None:
+    readline.parse_and_bind("tab: complete")
+    readline.set_completer(Completer().complete)
+
     while True:
         sys.stdout.write("$ ")
         arguments = shlex.split(input(), posix=True)
