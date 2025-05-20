@@ -1,3 +1,4 @@
+import shutil
 import sys
 from typing import NoReturn
 
@@ -10,6 +11,20 @@ def execute_exit(arguments: list[str]) -> NoReturn:
     sys.exit(int(arguments[1]))
 
 
+def is_builtin(command_name: str) -> bool:
+    return command_name in ["echo", "exit", "type"]
+
+
+def execute_type(arguments: list[str]) -> None:
+    for command_name in arguments[1:]:
+        if is_builtin(command_name):
+            sys.stdout.write(f"{command_name} is a shell builtin\n")
+        elif (path := shutil.which(command_name)) is not None:
+            sys.stdout.write(f"{command_name} is {path}\n")
+        else:
+            sys.stdout.write(f"{command_name}: not found\n")
+
+
 def execute(arguments: list[str]) -> None:
     if not arguments:
         return
@@ -20,6 +35,8 @@ def execute(arguments: list[str]) -> None:
             execute_echo(arguments)
         case "exit":
             execute_exit(arguments)
+        case "type":
+            execute_type(arguments)
         case _:
             sys.stderr.write(f"{command_name}: command not found\n")
 
