@@ -10,11 +10,11 @@ from typing import NoReturn
 def get_all_executables() -> set[str]:
     executables = set()
 
-    dirs = os.getenv("PATH")
-    if dirs is None:
+    path_env = os.getenv("PATH")
+    if path_env is None:
         return executables
 
-    for d in dirs:
+    for d in path_env.split(":"):
         try:
             names = os.listdir(d)
         except FileNotFoundError:
