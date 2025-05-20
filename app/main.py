@@ -109,8 +109,7 @@ def main() -> None:
     readline.set_completer(Completer().complete)
 
     while True:
-        sys.stdout.write("$ ")
-        arguments = shlex.split(input(), posix=True)
+        arguments = shlex.split(input("$ "), posix=True)
         execute(arguments)
 
 
