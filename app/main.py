@@ -5,6 +5,14 @@ import sys
 from typing import NoReturn
 
 
+def execute_cd(arguments: list[str]) -> None:
+    destination = os.path.expanduser(arguments[1])
+    try:
+        os.chdir(destination)
+    except FileNotFoundError:
+        sys.stderr.write(f"cd: {destination}: No such file or directory\n")
+
+
 def execute_echo(arguments: list[str]) -> None:
     sys.stdout.write(" ".join(arguments[1:]) + "\n")
 
@@ -18,7 +26,7 @@ def execute_pwd(arguments: list[str]) -> None:
 
 
 def is_builtin(command_name: str) -> bool:
-    return command_name in ["echo", "exit", "pwd", "type"]
+    return command_name in ["cd", "echo", "exit", "pwd", "type"]
 
 
 def execute_type(arguments: list[str]) -> None:
@@ -37,6 +45,8 @@ def execute(arguments: list[str]) -> None:
 
     command_name = arguments[0]
     match command_name:
+        case "cd":
+            execute_cd(arguments)
         case "echo":
             execute_echo(arguments)
         case "exit":
