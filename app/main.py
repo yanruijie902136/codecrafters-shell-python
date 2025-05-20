@@ -1,4 +1,5 @@
 import os
+import shlex
 import shutil
 import subprocess
 import sys
@@ -65,7 +66,7 @@ def execute(arguments: list[str]) -> None:
 def main() -> None:
     while True:
         sys.stdout.write("$ ")
-        arguments = input().split()
+        arguments = shlex.split(input(), posix=True)
         execute(arguments)
 
 
