@@ -2,7 +2,7 @@ import readline
 from typing import NoReturn
 
 from .autocomplete import Autocompleter
-from .command import execute
+from .command import execute_commands
 from .scanner import Scanner
 from .parser import Parser
 
@@ -21,7 +21,5 @@ class Shell:
         while True:
             line = input(self._prompt)
             tokens = self._scanner.scan(line)
-            # print(tokens)
-            command = self._parser.parse(tokens)
-            # print(command)
-            execute(command)
+            commands = self._parser.parse(tokens)
+            execute_commands(commands)

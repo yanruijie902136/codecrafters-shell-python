@@ -86,7 +86,7 @@ def _execute(arguments: list[str]) -> None:
                 sys.stderr.write(f"{command_name}: command not found\n")
 
 
-def execute(command: Command) -> None:
+def execute_command(command: Command) -> None:
     with ExitStack() as stack:
         if command.redir_stdout is not None:
             f = open(*command.redir_stdout)
@@ -99,3 +99,39 @@ def execute(command: Command) -> None:
             stack.enter_context(redirect_stderr(f))
 
         _execute(command.arguments)
+
+
+def execute_commands(commands: list[Command]) -> None:
+    if not commands:
+        return
+    elif len(commands) == 1:
+        execute_command(commands[0])
+        return
+
+    rfd, wfd, prev_rfd = -1, -1, -1
+    for i, command in enumerate(commands):
+        if i < len(commands) - 1:
+            rfd, wfd = os.pipe()
+
+        if os.fork() == 0:
+            if i > 0:
+                os.dup2(prev_rfd, 0)
+                os.close(prev_rfd)
+
+            if i < len(commands) - 1:
+                os.dup2(wfd, 1)
+                os.close(wfd)
+
+            execute_command(command)
+            sys.exit(0)
+
+        if i > 0:
+            os.close(prev_rfd)
+
+        if i < len(commands) - 1:
+            os.close(wfd)
+
+        prev_rfd = rfd
+
+    for i in range(len(commands)):
+        os.wait()

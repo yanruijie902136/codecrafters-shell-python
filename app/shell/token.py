@@ -9,6 +9,7 @@ TokenType = enum.Enum(
         "EOF",
         "GREAT",
         "IO_NUMBER",
+        "OR",
         "WORD",
     ],
 )

@@ -46,6 +46,8 @@ class Scanner:
         match (c := self._advance()):
             case " ":
                 pass
+            case "|":
+                self._add_token(TokenType.OR)
             case ">":
                 self._add_token(TokenType.DGREAT if self._match(">") else TokenType.GREAT)
             case _:
