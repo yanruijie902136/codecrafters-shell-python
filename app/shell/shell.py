@@ -19,6 +19,7 @@ class Shell:
         readline.set_completer(self._autocompleter.complete)
 
         readline.set_auto_history(True)
+        readline.parse_and_bind("\"\\C-p\": previous-history")
 
         while True:
             line = input(self._prompt)
