@@ -56,7 +56,8 @@ def _execute_exit(arguments: list[str]) -> None:
 
 def _execute_history(arguments: list[str]) -> None:
     nitems = readline.get_current_history_length()
-    for i in range(1, nitems + 1):
+    n = int(arguments[1]) if len(arguments) > 1 else nitems
+    for i in range(nitems + 1 - n, nitems + 1):
         line = readline.get_history_item(i)
         sys.stdout.write(f"{i:>5}  {line}\n")
 
