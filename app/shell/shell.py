@@ -20,6 +20,7 @@ class Shell:
 
         readline.set_auto_history(True)
         readline.parse_and_bind("\"\\C-p\": previous-history")
+        readline.parse_and_bind("\"\\C-n\": next-history")
 
         while True:
             line = input(self._prompt)
