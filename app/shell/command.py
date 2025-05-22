@@ -6,7 +6,7 @@ from contextlib import ExitStack, redirect_stderr, redirect_stdout
 from dataclasses import dataclass
 
 
-BUILTINS = set(["cd", "echo", "exit", "pwd", "type"])
+BUILTINS = set(["cd", "echo", "exit", "history", "pwd", "type"])
 
 
 def get_all_executables() -> set[str]:
