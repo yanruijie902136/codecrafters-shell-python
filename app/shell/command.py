@@ -1,4 +1,5 @@
 import os
+import readline
 import shutil
 import subprocess
 import sys
@@ -53,6 +54,13 @@ def _execute_exit(arguments: list[str]) -> None:
     sys.exit(int(arguments[1]))
 
 
+def _execute_history(arguments: list[str]) -> None:
+    nitems = readline.get_current_history_length()
+    for i in range(1, nitems + 1):
+        line = readline.get_history_item(i)
+        sys.stdout.write(f"{i:>5}  {line}\n")
+
+
 def _execute_pwd(arguments: list[str]) -> None:
     sys.stdout.write(os.getcwd() + "\n")
 
@@ -75,6 +83,8 @@ def _execute(arguments: list[str]) -> None:
             _execute_echo(arguments)
         case "exit":
             _execute_exit(arguments)
+        case "history":
+            _execute_history(arguments)
         case "pwd":
             _execute_pwd(arguments)
         case "type":

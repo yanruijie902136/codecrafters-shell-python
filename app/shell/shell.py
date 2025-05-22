@@ -18,6 +18,8 @@ class Shell:
         readline.parse_and_bind("tab: complete")
         readline.set_completer(self._autocompleter.complete)
 
+        readline.set_auto_history(True)
+
         while True:
             line = input(self._prompt)
             tokens = self._scanner.scan(line)
