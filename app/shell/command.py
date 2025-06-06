@@ -54,15 +54,24 @@ def _execute_exit(arguments: list[str]) -> None:
     sys.exit(int(arguments[1]))
 
 
+_last_append_nitems = 0
+
+
 def _execute_history(arguments: list[str]) -> None:
+    nitems = readline.get_current_history_length()
+
     if len(arguments) > 1 and arguments[1] == "-r":
         readline.read_history_file(arguments[2])
         return
     elif len(arguments) > 1 and arguments[1] == "-w":
         readline.write_history_file(arguments[2])
         return
+    elif len(arguments) > 1 and arguments[1] == "-a":
+        global _last_append_nitems
+        readline.append_history_file(nitems - _last_append_nitems, arguments[2])
+        _last_append_nitems = nitems
+        return
 
-    nitems = readline.get_current_history_length()
     n = int(arguments[1]) if len(arguments) > 1 else nitems
     for i in range(nitems + 1 - n, nitems + 1):
         line = readline.get_history_item(i)
