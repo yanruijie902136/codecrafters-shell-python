@@ -60,16 +60,17 @@ _last_append_nitems = 0
 def _execute_history(arguments: list[str]) -> None:
     nitems = readline.get_current_history_length()
 
-    if len(arguments) > 1 and arguments[1] == "-r":
-        readline.read_history_file(arguments[2])
-        return
-    elif len(arguments) > 1 and arguments[1] == "-w":
-        readline.write_history_file(arguments[2])
-        return
-    elif len(arguments) > 1 and arguments[1] == "-a":
-        global _last_append_nitems
-        readline.append_history_file(nitems - _last_append_nitems, arguments[2])
-        _last_append_nitems = nitems
+    if len(arguments) == 3:
+        histfile = arguments[2]
+        match arguments[1]:
+            case "-r":
+                readline.read_history_file(histfile)
+            case "-w":
+                readline.write_history_file(histfile)
+            case "-a":
+                global _last_append_nitems
+                readline.append_history_file(nitems - _last_append_nitems, histfile)
+                _last_append_nitems = nitems
         return
 
     n = int(arguments[1]) if len(arguments) > 1 else nitems
