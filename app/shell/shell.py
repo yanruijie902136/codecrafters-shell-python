@@ -1,3 +1,4 @@
+import atexit
 import os
 import readline
 from typing import NoReturn
@@ -28,6 +29,7 @@ class Shell:
                 readline.read_history_file(histfile)
             except OSError:
                 pass
+            atexit.register(readline.write_history_file, histfile)
 
         while True:
             line = input(self._prompt)
