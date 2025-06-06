@@ -58,6 +58,9 @@ def _execute_history(arguments: list[str]) -> None:
     if len(arguments) > 1 and arguments[1] == "-r":
         readline.read_history_file(arguments[2])
         return
+    elif len(arguments) > 1 and arguments[1] == "-w":
+        readline.write_history_file(arguments[2])
+        return
 
     nitems = readline.get_current_history_length()
     n = int(arguments[1]) if len(arguments) > 1 else nitems
