@@ -1,3 +1,4 @@
+import os
 import readline
 from typing import NoReturn
 
@@ -21,6 +22,12 @@ class Shell:
         readline.set_auto_history(True)
         readline.parse_and_bind("\"\\C-p\": previous-history")
         readline.parse_and_bind("\"\\C-n\": next-history")
+
+        if (histfile := os.environ.get("HISTFILE")) is not None:
+            try:
+                readline.read_history_file(histfile)
+            except OSError:
+                pass
 
         while True:
             line = input(self._prompt)
